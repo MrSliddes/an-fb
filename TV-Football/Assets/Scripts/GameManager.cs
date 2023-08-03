@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Application.targetFrameRate = 90; // nice and smooth
+
         components.menuStart.SetActive(true);
         components.menuInfo.SetActive(false);
         components.menuGame.SetActive(false);
