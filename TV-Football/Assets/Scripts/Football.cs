@@ -2,28 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using static UnityEngine.GraphicsBuffer;
 
+/// <summary>
+/// Handles the football physics
+/// </summary>
 public class Football : MonoBehaviour
 {
     public Values values;
     public Components components;
     public Events events;
 
+    /// <summary>
+    /// Stored height value of football for calculating inital velocity when shooting
+    /// </summary>
     private float height;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    /// <summary>
+    /// Shoot the ball towords a target position
+    /// </summary>
+    /// <param name="target"></param>
     public void ShootToTarget(Vector3 target) 
     {
         Physics.gravity = Vector3.up * values.gravity;
@@ -33,6 +30,10 @@ public class Football : MonoBehaviour
         events.onShoot.Invoke();
     }
 
+    /// <summary>
+    /// Reset the ball towords a position
+    /// </summary>
+    /// <param name="position"></param>
     public void ResetBall(Vector3 position)
     {
         components.rigidbody.velocity = Vector3.zero;
@@ -41,8 +42,14 @@ public class Football : MonoBehaviour
         components.trailRenderer.Clear();
     }
 
+    /// <summary>
+    /// Calculate the lauch data (velocity) for the ball needed to reach target
+    /// </summary>
+    /// <param name="target"></param>
+    /// <returns></returns>
     private LaunchData CalculateLaunchData(Vector3 target)
     {
+        // Get velocity with fancy kinematic equation calculation
         float displacementY = target.y - components.rigidbody.position.y;
         Vector3 displacementXZ = new Vector3(target.x - components.rigidbody.position.x, 0, target.z - components.rigidbody.position.z);
         float time = Mathf.Sqrt(-2 * height / values.gravity) + Mathf.Sqrt(2 * (displacementY - height) / values.gravity);
@@ -54,36 +61,47 @@ public class Football : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        // Get callback when ball hit something
         events.onHitSomething.Invoke();
     }
-
 
     [System.Serializable]
     public class Components
     {
+        [Tooltip("The balls rigidbody")]
         public Rigidbody rigidbody;
+        [Tooltip("Trailrenderer of the ball to visualize cool velocity")]
         public TrailRenderer trailRenderer;
     }
 
     [System.Serializable]
     public class Events
     {
+        [Tooltip("When the ball gets shot")]
         public UnityEvent onShoot;
+        [Tooltip("When the ball hits a collider")]
         public UnityEvent onHitSomething;
     }
 
     [System.Serializable]
     public class Values
     {
+        [Tooltip("The gravity applied to the ball")]
         public float gravity = -18;
-        public float speed = 1;
-
-        public bool debugPath;
     }
 
+    /// <summary>
+    /// Launch data struct for storing values for shooting
+    /// </summary>
     private struct LaunchData
     {
+        /// <summary>
+        /// The velocity the ball gets after calculation
+        /// </summary>
         public readonly Vector3 initialVelocity;
+        /// <summary>
+        /// The estimated time to reach target
+        /// </summary>
         public readonly float timeToTarget;
 
         public LaunchData(Vector3 initialVelocity, float timeToTarget)

@@ -4,15 +4,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// Handles the interaction with the ball and the user
+/// </summary>
 public class PenaltyKick : MonoBehaviour
 {
     public Values values;
     public Components components;
 
+    /// <summary>
+    /// Is the user allowed to interact with the ball?
+    /// </summary>
     private bool allowInteraction;
+    /// <summary>
+    /// Has the ball been clicked
+    /// </summary>
     private bool clickedBall;
+    /// <summary>
+    /// Show the touch trail of the user
+    /// </summary>
     private bool showTouchTrail;
+    /// <summary>
+    /// Current mouse (vinger) position of user
+    /// </summary>
     private Vector2 mousePosition;
+    /// <summary>
+    /// Coroutine for recalling ball after x time
+    /// </summary>
     private Coroutine coroutineBallExceedTime;
 
     // Start is called before the first frame update
@@ -21,12 +39,10 @@ public class PenaltyKick : MonoBehaviour
         SetupBall();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    /// <summary>
+    /// Is the user allowed to interact with ball?
+    /// </summary>
+    /// <param name="value"></param>
     public void AllowInteraction(bool value)
     {
         allowInteraction = value;
@@ -41,6 +57,10 @@ public class PenaltyKick : MonoBehaviour
         SetupBall();
     }
 
+
+    /// <summary>
+    /// Check for a ball at mousePosition
+    /// </summary>
     private void CheckForBall()
     {
         // Check for a ball at the mouse position
@@ -58,10 +78,12 @@ public class PenaltyKick : MonoBehaviour
             input.z = values.touchTrailOffset;
             components.touchTrailRenderer.transform.position = Camera.main.ScreenToWorldPoint(input);
             components.touchTrailRenderer.Clear();
-            Debug.Log("Pressed ball");
         }
     }
 
+    /// <summary>
+    /// Setup the ball
+    /// </summary>
     private void SetupBall()
     {
         Vector3 pos = components.footballStartTransform.position + new Vector3(0, 0, -2);
@@ -70,6 +92,9 @@ public class PenaltyKick : MonoBehaviour
         components.footballTransform.DORotate(new Vector3(360, 0, 0), 1f, RotateMode.FastBeyond360);
     }
 
+    /// <summary>
+    /// Shoot the ball towords where the user released input
+    /// </summary>
     private void ShootBall()
     {
         RaycastHit hit;
@@ -82,12 +107,19 @@ public class PenaltyKick : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Reset ball after exceeding alive time
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator BallExceedTime()
     {
         yield return new WaitForSeconds(values.ballMaxAliveTime);
         ResetBall();
     }
 
+    /// <summary>
+    /// Update the touch trail of the user
+    /// </summary>
     private void UpdateTouchTrail()
     {
         if(!showTouchTrail) return;
@@ -145,25 +177,15 @@ public class PenaltyKick : MonoBehaviour
     [System.Serializable]
     public class Components
     {
-        /// <summary>
-        /// Transform of the football
-        /// </summary>
+        [Tooltip("Transform of the football")]
         public Transform footballTransform;
-        /// <summary>
-        /// Start position of football before kick
-        /// </summary>
+        [Tooltip("Start position of the football before kick")]
         public Transform footballStartTransform;
-        /// <summary>
-        /// The target to shoot at in the goal
-        /// </summary>
+        [Tooltip("Target to shoot at in the goal")]
         public Transform goalTargetTransform;
-        /// <summary>
-        /// The football script
-        /// </summary>
+        [Tooltip("Link to football script")]
         public Football football;
-        /// <summary>
-        /// Linerenderer for visualizing aim
-        /// </summary>
+        [Tooltip("Trailrenderer used for visualizing user aim")]
         public TrailRenderer touchTrailRenderer;
     }
 
@@ -172,7 +194,7 @@ public class PenaltyKick : MonoBehaviour
     {
         [Tooltip("Time in seconds to wait after shooting to reset ball")]
         public float ballMaxAliveTime = 3f;
-
+        [Tooltip("Offset of visual touch trail of user")]
         public float touchTrailOffset = 1;
     }
 }

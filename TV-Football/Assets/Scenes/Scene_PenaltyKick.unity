@@ -123,6 +123,63 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &61395134
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 61395136}
+  - component: {fileID: 61395135}
+  m_Layer: 0
+  m_Name: Remote Config
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &61395135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 61395134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7649d527eb806634e9e23e08bae571e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jsonData: "{\n    \"ballMaxAliveTime\": 2.0,\n    \"scorePerGoal\": 1000,\n   
+    \"ballGravity\": -18.0,\n    \"gameTime\": 30.0\n}"
+  remoteConfigData:
+    ballMaxAliveTime: 3
+    scorePerGoal: 1000
+    ballGravity: -18
+    gameTime: 30
+  components:
+    penaltyKick: {fileID: 762269454}
+    football: {fileID: 2137058426}
+    pointsController: {fileID: 597696750}
+    gameManager: {fileID: 1405588046}
+    timer: {fileID: 1330431355}
+--- !u!4 &61395136
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 61395134}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &183495018
 GameObject:
   m_ObjectHideFlags: 0
@@ -186,7 +243,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!96 &314220905
 TrailRenderer:
@@ -544,6 +601,7 @@ Transform:
   - {fileID: 410087041}
   - {fileID: 1964602101}
   - {fileID: 1955306589}
+  - {fileID: 1344883137}
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -846,8 +904,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fea50ed18ab30c54993aabb45423197a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  points: 0
-  pointsField: {fileID: 934610527}
+  values:
+    defaultAddScore: 1000
+  components:
+    pointsField: {fileID: 934610527}
 --- !u!1001 &642123339
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -863,7 +923,7 @@ PrefabInstance:
     - target: {fileID: 7274650895733901518, guid: 8c7430a43eda59b43afba0d50cbefc17,
         type: 3}
       propertyPath: onEnter.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
-      value: 1000
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7274650895733901519, guid: 8c7430a43eda59b43afba0d50cbefc17,
         type: 3}
@@ -885,10 +945,25 @@ PrefabInstance:
       propertyPath: targetPoint.z
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: 7274650895733901520, guid: 8c7430a43eda59b43afba0d50cbefc17,
+        type: 3}
+      propertyPath: values.targetPoint.x
+      value: -3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7274650895733901520, guid: 8c7430a43eda59b43afba0d50cbefc17,
+        type: 3}
+      propertyPath: values.targetPoint.y
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 7274650895733901520, guid: 8c7430a43eda59b43afba0d50cbefc17,
+        type: 3}
+      propertyPath: values.targetPoint.z
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 7274650895733901523, guid: 8c7430a43eda59b43afba0d50cbefc17,
         type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 7274650895733901523, guid: 8c7430a43eda59b43afba0d50cbefc17,
         type: 3}
@@ -1212,8 +1287,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1526443744}
+  - {fileID: 1659965663}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &762269456
 MonoBehaviour:
@@ -1468,7 +1544,7 @@ RectTransform:
   - {fileID: 1707359068}
   - {fileID: 1192001602}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2176,8 +2252,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a1cd8f79ffc8d842906cb1fe9c8ebdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countDown: 30
-  timerField: {fileID: 1330431356}
+  values:
+    countDown: 30
+  components:
+    timerField: {fileID: 1330431356}
 --- !u!114 &1330431356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2360,13 +2438,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1344883134}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1.5, z: 12.63}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_Father: {fileID: 408249184}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1361039128
 GameObject:
@@ -2778,7 +2856,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 1000
+          m_IntArgument: 500
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -2877,8 +2955,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 665022230}
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_Father: {fileID: 762269455}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1676788456
 GameObject:
@@ -3217,7 +3295,7 @@ Transform:
   m_Children:
   - {fileID: 1989775966}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1835920265
 GameObject:
@@ -4308,7 +4386,7 @@ Transform:
   m_Children:
   - {fileID: 1361039129}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &2137058424
 SphereCollider:
@@ -4445,8 +4523,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   values:
     gravity: -18
-    speed: 1
-    debugPath: 0
   components:
     rigidbody: {fileID: 2137058427}
     trailRenderer: {fileID: 2137058425}
@@ -4731,10 +4807,30 @@ PrefabInstance:
       propertyPath: targetReachTime
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 7274650895733901520, guid: 8c7430a43eda59b43afba0d50cbefc17,
+        type: 3}
+      propertyPath: values.targetPoint.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7274650895733901520, guid: 8c7430a43eda59b43afba0d50cbefc17,
+        type: 3}
+      propertyPath: values.targetPoint.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7274650895733901520, guid: 8c7430a43eda59b43afba0d50cbefc17,
+        type: 3}
+      propertyPath: values.targetPoint.z
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 7274650895733901520, guid: 8c7430a43eda59b43afba0d50cbefc17,
+        type: 3}
+      propertyPath: values.targetReachTime
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7274650895733901523, guid: 8c7430a43eda59b43afba0d50cbefc17,
         type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7274650895733901523, guid: 8c7430a43eda59b43afba0d50cbefc17,
         type: 3}
