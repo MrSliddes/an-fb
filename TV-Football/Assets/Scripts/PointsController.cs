@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using TMPro;
 using UnityEngine;
 
@@ -23,6 +24,11 @@ public class PointsController : MonoBehaviour
     public void AddPoints(int amount)
     {
         points += amount;
+    }
+
+    public void ResetScore()
+    {
+        points = 0;
     }
 
     private void UpdatePoints()

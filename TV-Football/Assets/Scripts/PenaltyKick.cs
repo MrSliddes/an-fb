@@ -9,7 +9,9 @@ public class PenaltyKick : MonoBehaviour
     public Values values;
     public Components components;
 
+    private bool allowInteraction;
     private bool clickedBall;
+    private bool showTouchTrail;
     private Vector2 mousePosition;
     private Coroutine coroutineBallExceedTime;
 
@@ -23,6 +25,11 @@ public class PenaltyKick : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void AllowInteraction(bool value)
+    {
+        allowInteraction = value;
     }
 
     /// <summary>
@@ -45,6 +52,12 @@ public class PenaltyKick : MonoBehaviour
             Football football = hit.transform.GetComponent<Football>();
             if(football == null) return;
             clickedBall = true;
+            // Touch Trail
+            showTouchTrail = true;
+            Vector3 input = mousePosition;
+            input.z = values.touchTrailOffset;
+            components.touchTrailRenderer.transform.position = Camera.main.ScreenToWorldPoint(input);
+            components.touchTrailRenderer.Clear();
             Debug.Log("Pressed ball");
         }
     }
@@ -54,6 +67,7 @@ public class PenaltyKick : MonoBehaviour
         Vector3 pos = components.footballStartTransform.position + new Vector3(0, 0, -2);
         components.football.ResetBall(pos);
         components.footballTransform.DOMove(components.footballStartTransform.position, 1f);
+        components.footballTransform.DORotate(new Vector3(360, 0, 0), 1f, RotateMode.FastBeyond360);
     }
 
     private void ShootBall()
@@ -74,6 +88,16 @@ public class PenaltyKick : MonoBehaviour
         ResetBall();
     }
 
+    private void UpdateTouchTrail()
+    {
+        if(!showTouchTrail) return;
+        if(components.touchTrailRenderer == null) return;
+
+        Vector3 input = mousePosition;
+        input.z = values.touchTrailOffset;
+        components.touchTrailRenderer.transform.position = Camera.main.ScreenToWorldPoint(input);
+    }
+
     #region Input
 
     /// <summary>
@@ -82,8 +106,10 @@ public class PenaltyKick : MonoBehaviour
     /// <param name="context"></param>
     public void OnInputClick(InputAction.CallbackContext context)
     {
+
         if(context.ReadValue<float>() > 0)
         {
+            if(!allowInteraction) return;
             // Press down
             CheckForBall();
         }
@@ -93,6 +119,8 @@ public class PenaltyKick : MonoBehaviour
             if(clickedBall)
             {
                 ShootBall();
+                components.touchTrailRenderer.Clear();
+                showTouchTrail = false;
             }
 
             clickedBall = false;
@@ -105,8 +133,11 @@ public class PenaltyKick : MonoBehaviour
     /// <param name="context"></param>
     public void OnInputPoint(InputAction.CallbackContext context)
     {
+        if(!allowInteraction) return;
+
         mousePosition = context.ReadValue<Vector2>();
-        Debug.Log(mousePosition);
+
+        UpdateTouchTrail();
     }
 
     #endregion
@@ -126,7 +157,14 @@ public class PenaltyKick : MonoBehaviour
         /// The target to shoot at in the goal
         /// </summary>
         public Transform goalTargetTransform;
+        /// <summary>
+        /// The football script
+        /// </summary>
         public Football football;
+        /// <summary>
+        /// Linerenderer for visualizing aim
+        /// </summary>
+        public TrailRenderer touchTrailRenderer;
     }
 
     [System.Serializable]
@@ -134,5 +172,7 @@ public class PenaltyKick : MonoBehaviour
     {
         [Tooltip("Time in seconds to wait after shooting to reset ball")]
         public float ballMaxAliveTime = 3f;
+
+        public float touchTrailOffset = 1;
     }
 }

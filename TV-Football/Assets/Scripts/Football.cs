@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using static UnityEngine.GraphicsBuffer;
 
 public class Football : MonoBehaviour
 {
     public Values values;
     public Components components;
+    public Events events;
 
     private float height;
 
@@ -28,14 +30,15 @@ public class Football : MonoBehaviour
         components.rigidbody.useGravity = true;
         height = Mathf.Clamp(target.y, 1, 99);
         components.rigidbody.velocity = CalculateLaunchData(target).initialVelocity;
+        events.onShoot.Invoke();
     }
 
     public void ResetBall(Vector3 position)
     {
-        components.trailRenderer.Clear();
         components.rigidbody.velocity = Vector3.zero;
         components.rigidbody.angularVelocity = Vector3.zero;
         transform.position = position;
+        components.trailRenderer.Clear();
     }
 
     private LaunchData CalculateLaunchData(Vector3 target)
@@ -49,11 +52,24 @@ public class Football : MonoBehaviour
         return new LaunchData(velocityXZ + velocityY * -Mathf.Sign(values.gravity), time);
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        events.onHitSomething.Invoke();
+    }
+
+
     [System.Serializable]
     public class Components
     {
         public Rigidbody rigidbody;
         public TrailRenderer trailRenderer;
+    }
+
+    [System.Serializable]
+    public class Events
+    {
+        public UnityEvent onShoot;
+        public UnityEvent onHitSomething;
     }
 
     [System.Serializable]
